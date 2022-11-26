@@ -1,45 +1,22 @@
-"""
-Usage:
-
-    $ python main.py
-"""
 import json
 import os
 import random
-from typing import Iterator, List, Tuple, Set
+from typing import Iterator, List, Set, Tuple
 
 import twitter  # type: ignore
 
 import config
 
 
-def random_image_markdown() -> str:
+def random_image_markdown(
+    twitter_client: twitter.Api,
+    usernames: Tuple[str],
+) -> str:
     """
     Return a markdown string for a random image.
     """
-    usernames = (
-        "HenryRothwell",
-        "womensart1",
-        "ahistoryinart",
-        "CanadaPaintings",
-    )
-    client = _twitter_client()
-
-    img_url, tweet_url = _fetch_random_image(client, usernames)
+    img_url, tweet_url = _fetch_random_image(twitter_client, usernames)
     return f"[![]({img_url})]({tweet_url})"
-
-
-def _twitter_client() -> twitter.Api:
-    """
-    Return a configured Twitter client.
-    """
-    return twitter.Api(
-        consumer_key=config.TWITTER_CONSUMER_KEY,
-        consumer_secret=config.TWITTER_CONSUMER_SECRET,
-        access_token_key=config.TWITTER_ACCESS_TOKEN_KEY,
-        access_token_secret=config.TWITTER_ACCESS_TOKEN_SECRET,
-        tweet_mode="extended",
-    )
 
 
 def _fetch_random_image(
@@ -65,13 +42,17 @@ def _fetch_random_image(
     raise RuntimeError("No image tweets found")
 
 
-def _image_tweets(client: twitter.Api, username: str) -> Iterator[Tuple[twitter.Status, Set[str]]]:
+def _image_tweets(
+    client: twitter.Api, username: str
+) -> Iterator[Tuple[twitter.Status, Set[str]]]:
     """
     Return an iterator of tweets that have linked images.
     """
     max_id = None
     while True:
-        statuses = client.GetUserTimeline(screen_name=username, max_id=max_id, count=200)
+        statuses = client.GetUserTimeline(
+            screen_name=username, max_id=max_id, count=200
+        )
         # Break the loop once we run out of pages.
         if len(statuses) <= 1:
             return
@@ -135,5 +116,23 @@ def _save_used_tweet_ids(tweet_ids: List[str]) -> None:
         return json.dump(tweet_ids, f)
 
 
+def _twitter_client() -> twitter.Api:
+    """
+    Return a configured Twitter client.
+    """
+    return twitter.Api(
+        consumer_key=config.TWITTER_CONSUMER_KEY,
+        consumer_secret=config.TWITTER_CONSUMER_SECRET,
+        access_token_key=config.TWITTER_ACCESS_TOKEN_KEY,
+        access_token_secret=config.TWITTER_ACCESS_TOKEN_SECRET,
+        tweet_mode="extended",
+    )
+
+
 if __name__ == "__main__":
-    print(random_image_markdown())
+    print(
+        random_image_markdown(
+            twitter_client=_twitter_client(),
+            usernames=config.TWITTER_USERNAMES,
+        )
+    )
