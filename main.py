@@ -16,7 +16,7 @@ def random_image_markdown(
     Return a markdown string for a random image.
     """
     img_url, tweet_url = _fetch_random_image(twitter_client, usernames)
-    return f"[![]({img_url})]({tweet_url})<br/><sub>— _Random painting (not related to content of PR)_</sub>"
+    return f"[![🖼]({img_url})]({tweet_url})<br/><sub>— _Random painting (not related to content of PR)_</sub>"
 
 
 def _fetch_random_image(

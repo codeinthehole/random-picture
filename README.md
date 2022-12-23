@@ -34,12 +34,12 @@ Run:
 which will print the markdown for a randomly selected image from one of the
 configured Twitter accounts. E.g.
 
-    [![](http://pbs.twimg.com/media/FigqihhXgAAQaP6.jpg)](https://twitter.com/womensart1/status/1596573028334592000)
+    [![🖼](http://pbs.twimg.com/media/FigqihhXgAAQaP6.jpg)](https://twitter.com/womensart1/status/1596573028334592000)
     <sub>— _Random painting (not related to content of PR)_</sub>"
 
 which renders as:
 
-[![](http://pbs.twimg.com/media/FigqihhXgAAQaP6.jpg)](https://twitter.com/womensart1/status/1596573028334592000)<br/><sub>—
+[![🖼](http://pbs.twimg.com/media/FigqihhXgAAQaP6.jpg)](https://twitter.com/womensart1/status/1596573028334592000)<br/><sub>—
 _Random painting (not related to content of PR)_</sub>
 
 A `archive.json` file is used to ensure the same image isn't returned more than
